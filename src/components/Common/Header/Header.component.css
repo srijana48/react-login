@@ -1,0 +1,32 @@
+.nav_bar{
+    height: 45px;
+    background-color: brown;
+}
+
+.nav_list{
+    list-style-type:none;
+}
+.nav_item a{
+    float: left;
+    padding: 10px;
+    color:white
+}
+.nav_item a:hover{
+    color:blue;
+    cursor: pointer;
+    text-decoration: none;
+
+}
+.nav_item:active{
+    font-weight:bold ;
+}
+
+.selected {
+    background-color: maroon;
+}
+
+.logout{
+    float : right;
+    margin-right: 10px;
+    margin-top: 3px;
+}
