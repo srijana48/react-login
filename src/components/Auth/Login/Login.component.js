@@ -56,7 +56,16 @@ export class Login extends Component {
                 responseType: 'json'
             })
             .then((response) => {
-                notify.showSuccess('Login Successfully');
+                notify.showSuccess(`welcome ${response.data.user.username}`);
+                //local storage
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('user', JSON.stringify(response.data.user));
+                localStorage.setItem('remember_me', this.state.remember_me);
+
+                //navigate to dashboard
+                this.props.history.push('/dashboard')
+
+
                 console.log('response is >>', response)
             })
             .catch(err => {
@@ -64,69 +73,69 @@ export class Login extends Component {
                 this.setState({
                     isSubmitting: false
                 })
-                })
-                /*setTimeout(() =>{
-                    notify.showSuccess('Login Successfully')
-                    //once API response is ready
-                    //setup local storage
-                    localStorage.setItem('remember_me',JSON.stringify(this.state.remember_me));
-                    this.props.history.push('/home/broadway');
-                  
-         
-                },2000)*/
+            })
+        /*setTimeout(() =>{
+            notify.showSuccess('Login Successfully')
+            //once API response is ready
+            //setup local storage
+            localStorage.setItem('remember_me',JSON.stringify(this.state.remember_me));
+            this.props.history.push('/home/broadway');
+          
+ 
+        },2000)*/
 
 
-            }
+    }
 
     handleChange = (e) => {
-                    let { name, value, type, checked } = e.target;
-                    // console.log('name >>', name);
-                    // console.log('value is >>', value)
-                    if (type === 'checkbox') {
-                        return this.setState({
-                            remember_me: checked
-                        })
-                    }
+        let { name, value, type, checked } = e.target;
+        // console.log('name >>', name);
+        // console.log('value is >>', value)
+        if (type === 'checkbox') {
+            return this.setState({
+                remember_me: checked
+            })
+        }
 
-                    this.setState(preState => ({
-                        data: {
-                            ...preState.data,
-                            [name]: value
-                        }
-                    }), () => {
-                        if (this.state.error[name]) {
-                            this.validateForm()
-                        }
-                    })
-                }
+        this.setState(preState => ({
+            data: {
+                ...preState.data,
+                [name]: value
+            }
+        }), () => {
+            if (this.state.error[name]) {
+                this.validateForm()
+            }
+        })
+    }
 
 
 
 
     validateForm = () => {
-                    let usernameErr = this.state.data['username'] ? '' : 'required field*'
-                    let passwordErr = this.state.data['password'] ? '' : 'required field*'
+        let usernameErr = this.state.data['username'] ? '' : 'required field*'
+        let passwordErr = this.state.data['password'] ? '' : 'required field*'
 
-                    this.setState({
-                        error: {
-                            username: usernameErr,
-                            password: passwordErr
-                        }
-                    })
+        this.setState({
+            error: {
+                username: usernameErr,
+                password: passwordErr
+            }
+        })
 
-                    let validForm = !(usernameErr || passwordErr)
+        let validForm = !(usernameErr || passwordErr)
 
-                    return validForm;
-                }
+        return validForm;
+    }
 
 
 
     render() {
 
-                let btn = this.state.isSubmitting
-                    ? <button disabled className="btn btn-info m-t-10">Loading in...</button>
-                    : <button type="submit" className="btn btn-info m-t-10">Login</button>
-        return(
+        let btn = this.state.isSubmitting
+            ? <button disabled className="btn btn-info m-t-10">Loading in...</button>
+            : <button type="submit" className="btn btn-info m-t-10">Login</button>
+        return (
             <div>
                 <h2>Login</h2>
                 <p>Please Login To Start Your Session</p>

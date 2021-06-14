@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
 import { notify } from '../../../utils/toastr';
+import axios from 'axios';
+import { handleError } from '../../../utils/errorHandler';
+const BASE_URL = 'http://localhost:8080/api'
 
 const defaultForm = {
     name: '',
@@ -78,7 +80,7 @@ export class Register extends Component {
 
     //submit button handle garney code
     handleSubmit = e => {
-        notify.showError('show error')
+        //notify.showError('show error')
         e.preventDefault();
 
         const isValidForm = this.validateRequiredFields();
@@ -90,13 +92,30 @@ export class Register extends Component {
         this.setState({
             isSubmitting: true
         })
+        axios
+            .post(`${BASE_URL}/auth/register`, this.state.data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                notify.showInfo('Registration Successful please login')
+                this.props.history.push('/');
+
+            })
+            .catch(err => {
+                handleError(err);
+                this.setState({
+                    isSubmitting: false
+                })
+            })
         //data is ready 
         //API CALL 
-        setTimeout(() => {
+        /*setTimeout(() => {
             this.setState({
                 isSubmitting: false
             })
-        }, 3000)
+        }, 3000) */
     }
 
     onChange = e => {
